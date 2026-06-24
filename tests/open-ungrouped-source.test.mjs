@@ -13,6 +13,12 @@ function cssBlock(selector) {
   return match[0];
 }
 
+function sourceFunctionBlock(name, nextName) {
+  const match = source.match(new RegExp(`function ${name}\\(\\) \\{[\\s\\S]*?\\n  \\}\\n\\n  function ${nextName}`));
+  assert.ok(match, `Missing ${name} function block`);
+  return match[0];
+}
+
 test("manifest exposes Chrome Web Store locales for supported languages", async () => {
   assert.equal(manifest.default_locale, "en");
   assert.equal(manifest.name, "__MSG_extName__");
@@ -204,6 +210,13 @@ test("project columns and saved links preview reorder with animation", () => {
   assert.match(source, /querySelector\("\.link-list"\)/);
   assert.match(css, /\.project-column[\s\S]*will-change: transform/);
   assert.match(css, /\.saved-link[\s\S]*will-change: transform/);
+});
+
+test("saved groups first keeps manual project order inside saved and empty partitions", () => {
+  const getModeProjects = sourceFunctionBlock("getModeProjects", "getActiveProject");
+
+  assert.match(getModeProjects, /return leftSaved - rightSaved;/);
+  assert.doesNotMatch(getModeProjects, /createdAt/);
 });
 
 test("project columns expose localized sort menu actions", () => {

@@ -1763,7 +1763,8 @@
     return [...projects].sort((left, right) => {
       const leftSaved = left.links.length > 0 ? 0 : 1;
       const rightSaved = right.links.length > 0 ? 0 : 1;
-      return leftSaved - rightSaved || left.createdAt - right.createdAt;
+      // Keep stable-sort ties so manual drag order survives inside each partition.
+      return leftSaved - rightSaved;
     });
   }
 
