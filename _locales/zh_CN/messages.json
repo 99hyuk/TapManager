@@ -1,0 +1,10 @@
+{
+  "extName": {
+    "message": "TabManager",
+    "description": "显示在 Chrome 和 Chrome 网上应用店中的扩展程序名称。"
+  },
+  "extDescription": {
+    "message": "按项目保存、整理并重新打开浏览器标签页的标签工作区。",
+    "description": "显示在 Chrome 和 Chrome 网上应用店中的简短扩展程序说明。"
+  }
+}

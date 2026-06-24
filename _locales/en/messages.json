@@ -1,0 +1,10 @@
+{
+  "extName": {
+    "message": "TabManager",
+    "description": "Extension name shown in Chrome and the Chrome Web Store."
+  },
+  "extDescription": {
+    "message": "A project-based tab workspace for saving, organizing, and reopening browser tabs.",
+    "description": "Short extension summary shown in Chrome and the Chrome Web Store."
+  }
+}

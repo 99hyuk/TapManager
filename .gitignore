@@ -1,0 +1,10 @@
+.playwright-mcp/
+.codex/
+.agents/
+dist/
+
+*.log
+*.tmp
+*.zip
+Thumbs.db
+Desktop.ini

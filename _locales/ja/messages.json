@@ -1,0 +1,10 @@
+{
+  "extName": {
+    "message": "TabManager",
+    "description": "Chrome と Chrome ウェブストアに表示される拡張機能名です。"
+  },
+  "extDescription": {
+    "message": "ブラウザタブをプロジェクト別に保存、整理、再表示できるタブワークスペースです。",
+    "description": "Chrome と Chrome ウェブストアに表示される短い拡張機能の説明です。"
+  }
+}

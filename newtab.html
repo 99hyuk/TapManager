@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TabManager</title>
+    <link rel="icon" href="icons/icon32.png" />
+    <link rel="stylesheet" href="newtab.css" />
+  </head>
+  <body>
+    <div class="workspace">
+      <aside id="sidebar" class="sidebar">
+        <div class="sidebar-rail">
+          <button
+            id="refreshTabs"
+            class="tab-count"
+            type="button"
+            title="Refresh current tabs"
+            data-i18n-title="action.refreshCurrentTabs"
+          >
+            <span id="currentTabCount">0</span>
+          </button>
+          <button
+            id="toggleSidebar"
+            class="rail-button"
+            type="button"
+            title="Pin tab list"
+            data-i18n-title="action.pinTabList"
+          >
+            <span aria-hidden="true" class="rail-split-icon"></span>
+          </button>
+          <button
+            id="createEmptyProject"
+            class="rail-button"
+            type="button"
+            title="Create group"
+            data-i18n-title="action.createGroup"
+          >
+            <span aria-hidden="true">+</span>
+          </button>
+        </div>
+
+        <div class="session-panel">
+          <section class="tab-session">
+            <div class="session-heading">
+              <span class="session-icon" aria-hidden="true"></span>
+              <div>
+                <h2 data-i18n="sidebar.currentWindow">Current window</h2>
+                <p id="selectedTabSummary">No tabs selected</p>
+              </div>
+            </div>
+            <div id="currentTabs" class="current-tabs" role="list"></div>
+          </section>
+
+          <footer class="sidebar-footer">
+            <div id="selectedTabActions" class="selected-tab-actions" hidden>
+              <button id="saveSelectedNewProject" type="button" data-i18n="action.newGroup">New group</button>
+              <div class="add-to-group-wrap">
+                <button
+                  id="saveSelectedActiveProject"
+                  type="button"
+                  aria-haspopup="menu"
+                  aria-expanded="false"
+                >
+                  <span data-i18n="action.addToGroup">Add to group</span>
+                </button>
+                <div id="addToGroupMenu" class="add-to-group-menu" role="menu" hidden></div>
+              </div>
+            </div>
+            <label class="filter-box">
+              <span aria-hidden="true">Search</span>
+              <input
+                id="tabFilter"
+                type="search"
+                placeholder="Filter tabs"
+                data-i18n-placeholder="search.filterTabs"
+                autocomplete="off"
+              />
+              <kbd>S</kbd>
+            </label>
+          </footer>
+        </div>
+      </aside>
+
+      <main class="board-shell">
+        <header class="board-topbar">
+          <div class="top-left">
+            <span class="board-icon" aria-hidden="true">
+              <img class="board-icon-image" src="icons/icon32.png" alt="" />
+            </span>
+            <div class="mode-toolbar">
+              <nav id="modeTabs" class="mode-tabs" aria-label="Board pages" data-i18n-aria-label="nav.boardPages"></nav>
+              <button
+                id="createTopPage"
+                class="toolbar-button create-top-page"
+                type="button"
+                title="Create page"
+                data-i18n-title="action.createPage"
+              >
+                <span aria-hidden="true">+</span>
+              </button>
+            </div>
+          </div>
+          <div class="top-actions">
+            <button id="openHelp" class="toolbar-button help-button" type="button" title="Help" data-i18n-title="help.open">
+              <span class="book-icon" aria-hidden="true"></span>
+              <span class="help-label" data-i18n="help.label">Help</span>
+            </button>
+            <label class="board-search" title="Search saved links" data-i18n-title="search.savedLinks">
+              <span aria-hidden="true">Search</span>
+              <input
+                id="boardSearch"
+                type="search"
+                placeholder="Search links"
+                data-i18n-placeholder="search.links"
+                autocomplete="off"
+              />
+            </label>
+            <button id="openSettings" class="toolbar-button" type="button" title="Settings" data-i18n-title="settings.title">
+              <span class="settings-icon" aria-hidden="true">&#9881;</span>
+            </button>
+          </div>
+        </header>
+
+        <section class="board-viewport" aria-label="Project board" data-i18n-aria-label="board.projectBoard">
+          <div id="projectBoard" class="project-board"></div>
+          <div id="addGroupSpace" class="add-group-space" hidden>
+            <button
+              id="addGroupButton"
+              class="add-group-button"
+              type="button"
+              title="Create group"
+              data-i18n-title="action.createGroup"
+            >
+              <span class="add-group-space-control" aria-hidden="true">+</span>
+              <span class="add-group-space-label" data-i18n="action.createGroup">Create group</span>
+            </button>
+          </div>
+          <section id="emptyCategory" class="empty-category" aria-label="Empty category" data-i18n-aria-label="empty.category">
+            <div class="empty-category-art" aria-hidden="true">
+              <div class="empty-category-card">
+                <span class="empty-category-arrow"></span>
+              </div>
+            </div>
+            <h2 data-i18n="empty.title">Drag tabs here to create your first group</h2>
+            <p data-i18n="empty.body">Drop one or more tabs from Current window into this space to save them as a new group.</p>
+            <div class="empty-category-hints" aria-hidden="true">
+              <span data-i18n="empty.selectTabs">Select tabs</span>
+              <span data-i18n="empty.dragHere">Drag here</span>
+              <span data-i18n="action.createGroup">Create group</span>
+            </div>
+          </section>
+        </section>
+
+        <div class="bottom-brand" data-i18n="app.brand">TabManager - New tab workspace</div>
+      </main>
+    </div>
+
+    <div id="pageTrashDrop" class="page-trash-drop" aria-hidden="true" hidden>
+      <div class="page-trash-card">
+        <span class="page-trash-icon" aria-hidden="true"></span>
+        <strong data-i18n="page.dropToDelete">Drop to delete page</strong>
+      </div>
+    </div>
+
+    <aside id="settingsPanel" class="settings-panel" aria-hidden="true">
+      <header class="settings-header">
+        <h2 data-i18n="settings.title">Settings</h2>
+        <button id="closeSettings" type="button" title="Close settings" data-i18n-title="settings.close">x</button>
+      </header>
+      <div class="settings-list">
+        <label class="setting-row">
+          <span>
+            <strong data-i18n="settings.language.title">Language</strong>
+            <small data-i18n="settings.language.desc">Change the board language.</small>
+          </span>
+          <select id="settingLanguage" aria-label="Language" data-i18n-aria-label="settings.language.title">
+            <option value="en">English</option>
+            <option value="ko">한국어</option>
+            <option value="zh">中文</option>
+            <option value="ja">日本語</option>
+          </select>
+        </label>
+        <label class="setting-row">
+          <span>
+            <strong data-i18n="settings.openLinks.title">Open links in current tab</strong>
+            <small data-i18n="settings.openLinks.desc">Replace the current tab instead of opening a separate tab.</small>
+          </span>
+          <input id="settingOpenLinksCurrentTab" type="checkbox" />
+        </label>
+        <label class="setting-row">
+          <span>
+            <strong data-i18n="settings.focusTab.title">Switch to opened tab</strong>
+            <small data-i18n="settings.focusTab.desc">Move Chrome focus to the newly opened tab after opening links.</small>
+          </span>
+          <input id="settingFocusOpenedTab" type="checkbox" checked />
+        </label>
+        <label class="setting-row">
+          <span>
+            <strong data-i18n="settings.savedFirst.title">Put saved groups first</strong>
+            <small data-i18n="settings.savedFirst.desc">Show groups with saved links before empty groups.</small>
+          </span>
+          <input id="settingSavedGroupsFirst" type="checkbox" />
+        </label>
+        <label class="setting-row">
+          <span>
+            <strong data-i18n="settings.openSitesAsGroup.title">Open sites as Chrome group</strong>
+            <small data-i18n="settings.openSitesAsGroup.desc">Use the sites button to open links as a named Chrome tab group.</small>
+          </span>
+          <input id="settingOpenSitesAsGroup" type="checkbox" checked />
+        </label>
+        <label class="setting-row">
+          <span>
+            <strong data-i18n="settings.darkMode.title">Dark mode</strong>
+            <small data-i18n="settings.darkMode.desc">Use a darker board and card theme.</small>
+          </span>
+          <input id="settingDarkMode" type="checkbox" />
+        </label>
+      </div>
+      <section id="backupSection" class="backup-section" aria-label="Backup & transfer" data-i18n-aria-label="backup.title">
+        <div>
+          <h3 data-i18n="backup.title">Backup & transfer</h3>
+          <p data-i18n="backup.desc">Export a compressed backup file or import one to restore this workspace.</p>
+        </div>
+        <div class="backup-actions">
+          <button id="importBackup" class="backup-button" type="button" data-i18n="backup.import">Import</button>
+          <button id="exportBackup" class="backup-button is-primary" type="button" data-i18n="backup.export">Export</button>
+        </div>
+        <input
+          id="backupFileInput"
+          type="file"
+          accept=".json,.gz,.gzip,.tabmanager,application/json,application/gzip"
+          data-i18n-aria-label="backup.import"
+          hidden
+        />
+      </section>
+      <section class="deleted-section" aria-label="Recently deleted" data-i18n-aria-label="deleted.recentlyDeleted">
+        <h3 data-i18n="deleted.recentlyDeleted">Recently deleted</h3>
+        <div class="deleted-block">
+          <div class="deleted-block-title" data-i18n="deleted.tabs">Tabs</div>
+          <div id="deletedLinksList" class="deleted-list"></div>
+        </div>
+        <div class="deleted-block">
+          <div class="deleted-block-title" data-i18n="deleted.groups">Groups</div>
+          <div id="deletedGroupsList" class="deleted-list"></div>
+        </div>
+      </section>
+    </aside>
+
+    <div id="helpModal" class="help-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="helpTitle">
+      <div class="help-card">
+        <header class="help-header">
+          <span id="helpKicker" class="help-kicker">1 / 4</span>
+          <button id="closeHelp" type="button" title="Close help" data-i18n-title="help.close">x</button>
+        </header>
+        <div id="helpVisual" class="help-visual" data-visual="pages" aria-hidden="true">
+          <span class="help-visual-book"></span>
+          <span class="help-visual-card"></span>
+          <span class="help-visual-line"></span>
+        </div>
+        <h2 id="helpTitle"></h2>
+        <p id="helpBody"></p>
+        <div id="helpDots" class="help-dots" aria-label="Help pages" data-i18n-aria-label="help.pages"></div>
+        <footer class="help-actions">
+          <button id="helpPrev" type="button" data-i18n="help.previous">Previous</button>
+          <button id="helpNext" type="button" data-i18n="help.next">Next</button>
+        </footer>
+      </div>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script src="newtab.js"></script>
+  </body>
+</html>

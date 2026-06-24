@@ -1,0 +1,10 @@
+{
+  "extName": {
+    "message": "TabManager",
+    "description": "Chrome 및 Chrome 웹 스토어에 표시되는 확장 프로그램 이름입니다."
+  },
+  "extDescription": {
+    "message": "프로젝트별로 브라우저 탭을 저장, 정리, 다시 열 수 있는 탭 워크스페이스입니다.",
+    "description": "Chrome 및 Chrome 웹 스토어에 표시되는 짧은 확장 프로그램 설명입니다."
+  }
+}
