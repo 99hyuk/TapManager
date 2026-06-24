@@ -1768,6 +1768,38 @@
     });
   }
 
+  function isSavedProject(project) {
+    return (project?.links?.length || 0) > 0;
+  }
+
+  function canMoveProjectNearTarget(sourceProjectId, targetProjectId) {
+    if (!state.settings.savedGroupsFirst || !targetProjectId) {
+      return true;
+    }
+
+    const sourceProject = state.projects.find((project) => project.id === sourceProjectId);
+    const targetProject = state.projects.find((project) => project.id === targetProjectId);
+    if (!sourceProject || !targetProject || sourceProject.mode !== targetProject.mode) {
+      return false;
+    }
+
+    return isSavedProject(sourceProject) === isSavedProject(targetProject);
+  }
+
+  function normalizeSavedFirstProjectOrder(projects, mode = state.activeMode) {
+    if (!state.settings.savedGroupsFirst) {
+      return projects;
+    }
+
+    const modeProjectIds = new Set(
+      state.projects.filter((project) => project.mode === mode).map((project) => project.id)
+    );
+    const scopedProjects = projects.filter((project) => modeProjectIds.has(project.id));
+    const savedProjects = scopedProjects.filter(isSavedProject);
+    const emptyProjects = scopedProjects.filter((project) => !isSavedProject(project));
+    return [...savedProjects, ...emptyProjects];
+  }
+
   function getActiveProject() {
     return (
       state.projects.find(
@@ -2249,6 +2281,10 @@
     let insertionIndex = reorderedModeProjects.length;
 
     if (targetProject) {
+      if (!canMoveProjectNearTarget(sourceProjectId, targetProject.id)) {
+        return;
+      }
+
       insertionIndex = reorderedModeProjects.findIndex((project) => project.id === targetProject.id);
       if (position === "after") {
         insertionIndex += 1;
@@ -2257,7 +2293,7 @@
 
     reorderedModeProjects.splice(insertionIndex, 0, sourceProject);
 
-    const nextModeProjects = [...reorderedModeProjects];
+    const nextModeProjects = normalizeSavedFirstProjectOrder(reorderedModeProjects, sourceProject.mode);
     await persist({
       ...state,
       projects: state.projects.map((project) => {
@@ -3706,6 +3742,10 @@
       return;
     }
 
+    if (!canMoveProjectNearTarget(sourceColumn.dataset.projectId, targetColumn.dataset.projectId)) {
+      return;
+    }
+
     const shouldInsertBefore =
       position === "before" && targetColumn.previousElementSibling !== sourceColumn;
     const shouldInsertAfter =
@@ -3744,7 +3784,7 @@
   }
 
   async function persistPreviewProjectOrder(projectId, nextModeProjects) {
-    const reorderedProjects = [...nextModeProjects];
+    const reorderedProjects = [...normalizeSavedFirstProjectOrder(nextModeProjects)];
     await persist({
       ...state,
       projects: state.projects.map((project) => {

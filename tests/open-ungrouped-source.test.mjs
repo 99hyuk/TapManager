@@ -14,7 +14,9 @@ function cssBlock(selector) {
 }
 
 function sourceFunctionBlock(name, nextName) {
-  const match = source.match(new RegExp(`function ${name}\\(\\) \\{[\\s\\S]*?\\n  \\}\\n\\n  function ${nextName}`));
+  const match = source.match(
+    new RegExp(`(?:async )?function ${name}\\([^)]*\\) \\{[\\s\\S]*?\\n  \\}\\n\\n  (?:async )?function ${nextName}`)
+  );
   assert.ok(match, `Missing ${name} function block`);
   return match[0];
 }
@@ -217,6 +219,22 @@ test("saved groups first keeps manual project order inside saved and empty parti
 
   assert.match(getModeProjects, /return leftSaved - rightSaved;/);
   assert.doesNotMatch(getModeProjects, /createdAt/);
+});
+
+test("saved groups first does not persist cross-partition project reorder attempts", () => {
+  const previewProjectPlacement = sourceFunctionBlock("previewProjectPlacement", "getPreviewProjectOrder");
+  const persistPreviewProjectOrder = sourceFunctionBlock("persistPreviewProjectOrder", "getSourceSavedLinkRow");
+  const moveProject = sourceFunctionBlock("moveProject", "createProjectFromDrop");
+
+  assert.match(source, /function canMoveProjectNearTarget/);
+  assert.match(source, /function normalizeSavedFirstProjectOrder/);
+  assert.match(
+    previewProjectPlacement,
+    /canMoveProjectNearTarget\(sourceColumn\.dataset\.projectId, targetColumn\.dataset\.projectId\)/
+  );
+  assert.match(persistPreviewProjectOrder, /normalizeSavedFirstProjectOrder\(nextModeProjects\)/);
+  assert.match(moveProject, /canMoveProjectNearTarget\(sourceProjectId, targetProject\.id\)/);
+  assert.match(moveProject, /normalizeSavedFirstProjectOrder\(reorderedModeProjects, sourceProject\.mode\)/);
 });
 
 test("project columns expose localized sort menu actions", () => {
