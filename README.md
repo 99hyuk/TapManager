@@ -55,11 +55,10 @@ Chrome Web Store > TabManager 검색 > Chrome에 추가
 
 ### 2. 탭을 그룹으로 저장
 
-탭을 보드의 빈 공간으로 끌면 새 그룹을 만들 수 있고, 기존 그룹 위로 끌면 해당 그룹에 추가됩니다. 여러 탭을 선택한 뒤 버튼으로 저장하는 방식도 지원합니다.
+왼쪽 Current window에서 탭을 고르고, 기존 그룹 또는 빈 보드 영역으로 드래그해 저장합니다. 여러 탭을 선택한 뒤 버튼으로 저장하는 방식도 함께 지원합니다.
 
 <p align="center">
-  <img src="store-assets/readme/empty-drop-guide.png" alt="빈 보드에서 탭을 끌어 그룹 만들기" width="48%">
-  <img src="store-assets/readme/create-group.png" alt="새 그룹 만들기 버튼" width="48%">
+  <img src="store-assets/readme/save-tabs-to-group.png" alt="현재 창 탭을 선택하거나 드래그해서 링크 그룹에 저장하는 흐름" width="100%">
 </p>
 
 ### 3. 링크 그룹 정리
